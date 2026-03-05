@@ -34,8 +34,8 @@ jobs:
           file: ./src/Dockerfile
           push: true
           tags: |
-            ${{ secrets.ACR_LOGIN_SERVER }}/app:latest
-            ${{ secrets.ACR_LOGIN_SERVER }}/app:${{ github.sha }}
+            ${{ secrets.ACR_LOGIN_SERVER }}/chat-app:latest
+            ${{ secrets.ACR_LOGIN_SERVER }}/chat-app:${{ github.sha }}
 
       - name: Remove .env file
         if: always()
