@@ -11,17 +11,25 @@ load_dotenv()
 azure_ai_project = os.getenv("FOUNDRY_ENDPOINT")
 
 # Instantiate your AI Red Teaming Agent
+# red_team_agent = RedTeam(
+#     azure_ai_project=azure_ai_project,
+#     credential=DefaultAzureCredential(),
+#     risk_categories=[
+#         RiskCategory.Violence,
+#         RiskCategory.HateUnfairness,
+#         RiskCategory.Sexual,
+#         RiskCategory.SelfHarm
+#     ],
+#     num_objectives=5,
+# )
+
+#below is how to create custom attach prompts for red teaming agent.
 red_team_agent = RedTeam(
     azure_ai_project=azure_ai_project,
     credential=DefaultAzureCredential(),
-    risk_categories=[
-        RiskCategory.Violence,
-        RiskCategory.HateUnfairness,
-        RiskCategory.Sexual,
-        RiskCategory.SelfHarm
-    ],
-    num_objectives=5,
+    custom_attack_seed_prompts="data/custom_attack_prompts.json",
 )
+
 
 #Configuration for Azure OpenAI model
 azure_openai_config = { 
@@ -31,6 +39,15 @@ azure_openai_config = {
 }
 
 async def main():
-    red_team_result = await red_team_agent.scan(target=azure_openai_config)
+    red_team_result = await red_team_agent.scan(
+        target=azure_openai_config,
+        scan_name="Red Team Scan - Easy-Mod Strategies",
+        attack_strategies=[
+            AttackStrategy.Flip,
+            AttackStrategy.ROT13,
+            AttackStrategy.Base64,
+            AttackStrategy.AnsiAttack,
+            AttackStrategy.Tense
+        ])
 
 asyncio.run(main())
