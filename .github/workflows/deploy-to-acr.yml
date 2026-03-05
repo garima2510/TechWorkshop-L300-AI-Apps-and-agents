@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'src/prompts/**'
+      - 'src/app/agents/*_initializer.py'
+      - 'src/app/tools/discountLogic.py'
+      - '.github/workflows/update-*.yml'
 
 jobs:
   build-and-push:
